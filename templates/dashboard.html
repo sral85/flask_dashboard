@@ -1,0 +1,71 @@
+<!DOCType HTML>
+<html>
+	<head>
+		<meta charset = "UTF-8">
+		<title> Dashboard </title>
+		<link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/style.css') }}">
+		<script language="javascript" type="text/javascript" src="{{ url_for('static', filename='js/plotly-latest.min.js') }}"></script>
+	</head>
+<body>
+	<form>
+		<fieldset>
+		<div class="container">
+			<div class="inputwrapper">
+			    <label for="datestart"> Startdatum </label> 
+				<input type="date" name="datestart" value = {{ datestart }} max="2017-11-30" min="2017-01-01" /> 
+			</div>
+		
+			<div class="inputwrapper">
+			    <label for="dateend"> Enddatum </label> 
+				<input type="date" name="dateend" value = {{ dateend }} max="2017-11-30" min="2017-01-01" /> 
+			</div>
+		
+			<div class="inputwrapper">
+			    <label for="device"> Device </label>
+				<select name="device">
+				    {% for x in ['desktop', 'mobile', 'tablet']%}
+					    {% if x == device %}
+						    <option value="{{x}}", selected='selected'> {{ x }} </option>
+						{% else %}
+						    <option value="{{x}}"> {{ x }} </option>
+						{% endif %}	
+					{% endfor %} 
+				</select>
+			</div>
+			
+			<div class="inputwrapper">
+			    <label for="metric"> Metric </label>
+				<select name="metric">
+				    {% for x in ['transactions', 'sessions', 'cvr']%}
+					    {% if x == metric %}
+						    <option value="{{x}}", selected='selected'> {{ x }} </option>
+						{% else %}
+						    <option value="{{x}}"> {{ x }} </option>
+						{% endif %}	
+					{% endfor %} 
+				</select>
+			</div>
+			
+			<div class="inputwrapper">
+			     <input type="submit" value = "Aktualisieren"/>
+			</div>
+		</div>
+		</fieldset>
+	</form>
+	<div id="plot"></div> 
+	 
+    <script>
+	plotobj = document.getElementById('plot');
+    var data = [{ x: {{data_plot['x']|safe}}, y: {{data_plot['y']}} }]
+    var layout = {
+                  xaxis: { title: 'date' },
+                  yaxis: { title: '{{ metric }}' }
+    };
+  
+	
+	Plotly.plot(plotobj, data, layout);
+    </script>	
+	
+</body>
+</html>
+
